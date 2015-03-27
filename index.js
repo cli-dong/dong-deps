@@ -5,6 +5,8 @@ var path = require('path')
 
 var extend = require('extend')
 
+var Tree = require('./lib/tree')
+
 var relativeToCwd = path.relative(__dirname, process.cwd()).replace(/\\/g, '/') || './'
 
 function _require(arr) {
@@ -38,7 +40,7 @@ function getElegantly(obj, props) {
 
 module.exports = function getTree(options) {
 
-  var tree = new require('./lib/tree')()
+  var tree = new Tree()
 
   function getDep(mod, dependencies, options) {
     var map = {}
