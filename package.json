@@ -11,9 +11,12 @@
     "url": "http://github.com/crossjs/dong-deps"
   },
   "keywords": [
-    "spm", "seajs",
-    "dependencies", "devDependencies",
-    "tree", "deps"
+    "spm",
+    "seajs",
+    "dependencies",
+    "devDependencies",
+    "tree",
+    "deps"
   ],
   "author": {
     "name": "crossjs",
@@ -30,6 +33,7 @@
   },
   "homepage": "https://github.com/crossjs/dong-deps",
   "dependencies": {
-    "extend": "^2.0.0"
+    "extend": "^2.0.0",
+    "package": "^1.0.1"
   }
 }

@@ -4,20 +4,9 @@ var fs = require('fs')
 var path = require('path')
 
 var extend = require('extend')
+var getPkg = require('package')
 
 var Tree = require('./lib/tree')
-
-var relativeToCwd = path.relative(__dirname, process.cwd()).replace(/\\/g, '/') || './'
-
-function _require(arr) {
-  if (typeof arr === 'string') {
-    arr = [arr]
-  }
-
-  arr.unshift(relativeToCwd)
-
-  return require(arr.join('/'))
-}
 
 // http://www.zhihu.com/question/27100221/answer/35264735
 function getElegantly(obj, props) {
@@ -51,7 +40,7 @@ module.exports = function getTree(options) {
         var dir = path.join(process.cwd(), options.spmRoot, key, value)
 
         if (fs.existsSync(dir)) {
-          var pkg = _require([options.spmRoot, key, value, 'package.json'])
+          var pkg = getPkg(path.join(options.spmRoot, key, value))
 
           if (pkg) {
             var main = getElegantly(pkg, options.scope.replace(/(\/|^)[^\/]+?$/, '/main')) || 'index.js'
@@ -78,7 +67,7 @@ module.exports = function getTree(options) {
     options.idleading = '/' + options.idleading
   }
 
-  var pkg = _require('package.json')
+  var pkg = getPkg('.')
 
   if (pkg) {
     getDep('', getElegantly(pkg, options.scope), options)
