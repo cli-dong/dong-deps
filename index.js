@@ -63,10 +63,6 @@ module.exports = function getTree(options) {
     scope: 'spm/dependencies'
   }, options)
 
-  if (options.idleading) {
-    options.idleading = '/' + options.idleading
-  }
-
   var pkg = getPkg('.')
 
   if (pkg) {
