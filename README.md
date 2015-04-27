@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install -g dong-deps
+npm install --save dong-deps
 ```
 
 ## Usage
