@@ -9,7 +9,7 @@ var getPkg = require('package')
 var Tree = require('./lib/tree')
 
 // http://www.zhihu.com/question/27100221/answer/35264735
-function getElegantly(obj, props) {
+function elegantlyGet(obj, props) {
   if (typeof props === 'string') {
     props = props.split('/')
   }
@@ -21,7 +21,7 @@ function getElegantly(obj, props) {
   var prop = props.shift()
 
   if (prop && obj.hasOwnProperty(prop)) {
-    return getElegantly(obj[prop], props)
+    return elegantlyGet(obj[prop], props)
   }
 
   return undefined
@@ -36,19 +36,19 @@ module.exports = function getTree(options) {
 
     if (dependencies) {
       Object.keys(dependencies).forEach(function(key) {
-        var value = dependencies[key];
+        var value = dependencies[key].replace(/[^\.\d]/g, '');
         var dir = path.join(process.cwd(), options.spmRoot, key, value)
 
         if (fs.existsSync(dir)) {
           var pkg = getPkg(path.join(options.spmRoot, key, value))
 
           if (pkg) {
-            var main = getElegantly(pkg, options.scope.replace(/(\/|^)[^\/]+?$/, '/main')) || 'index.js'
+            var main = elegantlyGet(pkg, options.scope.replace(/(\/|^)[^\/]+?$/, '/main')) || 'index.js'
 
-            map[key] = [options.idleading, options.spmRoot, key, value, main.replace(/^\.\//, '')].join('/')
+            map[key] = [options.prefix, options.spmRoot, key, value, main.replace(/^\.\//, '')].join('/')
 
             // sub tree
-            getDep(key, getElegantly(pkg, options.scope), options)
+            getDep(key, elegantlyGet(pkg, options.scope), options)
           }
         }
       })
@@ -58,7 +58,7 @@ module.exports = function getTree(options) {
   }
 
   options = extend({
-    idleading: '',
+    prefix: '',
     spmRoot: 'spm_modules',
     scope: 'spm/dependencies'
   }, options)
@@ -66,7 +66,7 @@ module.exports = function getTree(options) {
   var pkg = getPkg('.')
 
   if (pkg) {
-    getDep('', getElegantly(pkg, options.scope), options)
+    getDep('', elegantlyGet(pkg, options.scope), options)
   }
 
   return tree
